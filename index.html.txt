@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CybernetX Ads</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { background: #222; color: #fff; padding: 1em; text-align: center; }
+    .lang-toggle { float: right; margin-top: -2.5em; margin-right: 1em; }
+    .container { padding: 1em; max-width: 800px; margin: auto; }
+    form, .ads { background: #fff; padding: 1em; margin-bottom: 1em; border-radius: 8px; }
+    input, textarea, select { width: 100%; padding: 0.5em; margin: 0.5em 0; }
+    .ad-card { border: 1px solid #ccc; padding: 1em; margin: 0.5em 0; border-radius: 6px; background: #fafafa; }
+    .ad-card img { max-width: 100%; height: auto; }
+    footer { text-align: center; padding: 1em; background: #eee; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">CybernetX Ads</h1>
+    <p id="tagline">Free Ad Publishing for All</p>
+    <div class="lang-toggle">
+      <button onclick="setLang('en')">English</button>
+      <button onclick="setLang('hi')">हिन्दी</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <form id="adForm">
+      <h2 id="formTitle">Post an Ad</h2>
+      <input type="text" id="adTitle" placeholder="Ad Title" required />
+      <textarea id="adDesc" placeholder="Description" required></textarea>
+      <select id="adCat">
+        <option value="Tech">Tech</option>
+        <option value="Education">Education</option>
+        <option value="Family">Family</option>
+        <option value="Offers">Offers</option>
+      </select>
+      <input type="url" id="adLink" placeholder="Link (optional)" />
+      <input type="file" id="adImage" accept="image/*" />
+      <button type="submit">Publish</button>
+    </form>
+
+    <div class="ads" id="adsGallery">
+      <h2 id="galleryTitle">Published Ads</h2>
+    </div>
+  </div>
+
+  <footer>
+    <p>© Momin / CybernetX — Ethical, Family-Safe Use Only</p>
+  </footer>
+
+  <script>
+    const langData = {
+      en: {
+        title: "CybernetX Ads",
+        tagline: "Free Ad Publishing for All",
+        formTitle: "Post an Ad",
+        galleryTitle: "Published Ads"
+      },
+      hi: {
+        title: "साइबरनेटएक्स विज्ञापन",
+        tagline: "सभी के लिए मुफ्त विज्ञापन प्रकाशन",
+        formTitle: "विज्ञापन पोस्ट करें",
+        galleryTitle: "प्रकाशित विज्ञापन"
+      }
+    };
+
+    function setLang(lang) {
+      document.getElementById("title").innerText = langData[lang].title;
+      document.getElementById("tagline").innerText = langData[lang].tagline;
+      document.getElementById("formTitle").innerText = langData[lang].formTitle;
+      document.getElementById("galleryTitle").innerText = langData[lang].galleryTitle;
+    }
+
+    document.getElementById("adForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const title = document.getElementById("adTitle").value;
+      const desc = document.getElementById("adDesc").value;
+      const cat = document.getElementById("adCat").value;
+      const link = document.getElementById("adLink").value;
+      const image = document.getElementById("adImage").files[0];
+
+      const reader = new FileReader();
+      reader.onload = function() {
+        const adHTML = `
+          <div class="ad-card">
+            <h3>${title}</h3>
+            <p><strong>Category:</strong> ${cat}</p>
+            <p>${desc}</p>
+            ${link ? `<p><a href="${link}" target="_blank">Visit Link</a></p>` : ""}
+            ${image ? `<img src="${reader.result}" alt="Ad Image"/>` : ""}
+          </div>
+        `;
+        document.getElementById("adsGallery").innerHTML += adHTML;
+        document.getElementById("adForm").reset();
+      };
+      if (image) reader.readAsDataURL(image);
+      else reader.onload();
+    });
+  </script>
+</body>
+</html>
